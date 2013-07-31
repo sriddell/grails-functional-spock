@@ -38,7 +38,7 @@ class SpecTestTypeLoader {
     }
 
     boolean isShouldRegisterSpecSupport() {
-        return !variables.functionalTests.any {it in specType}
+        return !variables.functionalTests.any {(it in specType) && it.name == 'spock' && it.relativeSourcePath == 'functional'}
     }
 
     private addFunctionalSpecSupport() {

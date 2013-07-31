@@ -48,6 +48,10 @@ class SpecTestTypeLoaderSpec extends Specification {
         binding.variables.functionalTests.find {it in GrailsSpecTestType}
     }
 
+    private boolean testTypeRegistered(String name, String relativeSourcePath) {
+        binding.variables.functionalTests.any {(it in GrailsSpecTestType) && it.name == name && it.relativeSourcePath == relativeSourcePath}
+    }
+
     def "if type already registered skip"() {
         given:
         binding.variables = [functionalTests: []]
@@ -58,6 +62,18 @@ class SpecTestTypeLoaderSpec extends Specification {
 
         then:
         functionalTestTypes.size() == 1
+    }
+
+    def "when functional tests define a spec type but not for functional spock"() {
+        given:
+        binding.variables = [functionalTests:[new GrailsSpecTestType('spock-somethingelse','somethingelse')]]
+
+        when:
+        loader.registerFunctionalSpecSupport()
+
+        then:
+        functionalTestTypes.size() == 2
+        testTypeRegistered('spock','functional') == true
     }
 
     private List getFunctionalTestTypes() {

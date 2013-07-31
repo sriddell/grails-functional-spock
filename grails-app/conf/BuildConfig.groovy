@@ -33,6 +33,9 @@ grails.project.dependency.resolution = {
 
     plugins {
         build ":release:2.0.2", {export = false}
+        test(":spock:0.7") {
+          exclude "spock-grails-support"
+        }
     }
 
     dependencies {
